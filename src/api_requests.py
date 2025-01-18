@@ -51,3 +51,16 @@ def get_top_album_name(band_name):
         first_album = album_info['topalbums']['album'][0]
         return first_album['name']
     return "No albums found"
+
+
+def get_band_popularity(band_name):
+    url = f"http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist={band_name}&api_key={api_key}&format=json"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        listeners = int(data['artist']['stats']['listeners'])
+        playcount = int(data['artist']['stats']['playcount'])
+        return listeners, playcount
+    else:
+        return None, None
