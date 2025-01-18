@@ -1,4 +1,6 @@
 from .api_requests import get_band_info, get_top_album_image, get_top_album_name, get_similar_artists
+from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands
+from .plot_visualisation import visualize_band_popularity
 import tkinter as tk
 from tkinter import messagebox, PhotoImage, Label, Toplevel
 import os
@@ -48,17 +50,41 @@ def start_gui():
                     album_canvas.create_text(100, 100, text="No image available", font="Calibri, 12")
             else:
                 album_canvas.create_text(100, 100, text="No image available", font="Calibri, 12")
+
             
     def analyze():
+        band_name = entry.get()
         newWindow = Toplevel(window)
 
-        newWindow.title("Analyzing Metal Bands")
+        newWindow.title("Analysing Metal Bands")
 
-        newWindow.geometry("400x200")
+        newWindow.geometry("600x400")
 
-        Label(newWindow, 
-          text ="This is a new window").pack()
-        
+        bands = load_bands_from_file("bands.txt")
+        df = analyse_bands_popularity(bands)
+                
+        band_info, rank_info, top_bands_info = compare_bands(band_name, df)
+
+        band_label = tk.Label(newWindow, text="Band Info", font="Calibri, 12", anchor="w")
+        band_label.pack(fill="both", padx=10, pady=10)
+
+        rank_label = tk.Label(newWindow, text="Rank Info", font="Calibri, 12", anchor="w")
+        rank_label.pack(fill="both", padx=10, pady=10)
+
+        top_bands_label = tk.Label(newWindow, text="Top 5 Bands", font="Calibri, 12", anchor="w")
+        top_bands_label.pack(fill="both", padx=10, pady=10)
+
+        band_label.config(text=band_info)
+        rank_label.config(text=rank_info)
+        top_bands_label.config(text=f"Top 5 Bands:\n{top_bands_info}")
+
+    def visualize_popularity():
+        band_name = entry.get()
+        bands = load_bands_from_file("bands.txt")
+
+        df = analyse_bands_popularity(bands)
+
+        visualize_band_popularity(band_name, df, window)
 
     window = tk.Tk()
 
@@ -108,7 +134,7 @@ def start_gui():
     analyze_button = tk.Button(window, text="Analyze Bands", anchor="center", command=analyze)
     analyze_button.place(x=785, y=715, anchor="w")
 
-    visualize_button = tk.Button(window, text="View Top Albums", anchor="center")
+    visualize_button = tk.Button(window, text="Visualize popularity", anchor="center", command=visualize_popularity)
     visualize_button.place(x=785, y=475, anchor="w")
 
     similar1 = tk.Label(window, font=("MS Gothic", 20), bg="black", fg="white")
