@@ -2,11 +2,14 @@
 
 A Python application that uses the Last.fm API to analyze metal music bands, their albums, and track popularity.
 
+# IMPORTANT
+### To include a metal band (or any band or artist) in analysis they have to be written in the bands.txt file.
+
 ## Features
 
 - Fetches information about metal bands, albums, and tracks.
-- Analyzes the most frequently played tracks and the popularity of bands.
-- Visualizes data using graphs.
+- Analyzes the most frequently played tracks(todo), where the band places on a ranking based on listeners and shows top 5 bands.
+- Visualizes four bands that surround the band searched based on listeners using graphs.
 
 ## Setup Instructions
 
