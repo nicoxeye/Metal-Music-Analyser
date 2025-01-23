@@ -89,7 +89,7 @@ def start_gui():
     window = tk.Tk()
 
     current_dir = os.path.dirname(__file__)
-    image_path = os.path.join(current_dir, "images", "bg2.png")
+    image_path = os.path.join(current_dir, "images", "bg.png")
 
     bg = PhotoImage(file=image_path)
   
@@ -110,40 +110,53 @@ def start_gui():
     window.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
     window.title("Metal Music Analyzer")
 
-    entry = tk.Entry(window, font=("MS Gothic", 24))
+    entry = tk.Entry(window, font=("MS PGothic", 24))
     entry.place(x=65, y=235, anchor="w", width=400, height=50)
 
-    search_button = tk.Button(window, text="Search", command=search_band)
-    search_button.place(x=420, y=235, anchor="center")
+    search_button = tk.Button(window, text="find", command=search_band, font=("MS PGothic", 12), bg="#20262B", fg="white")
+    search_button.place(x=430, y=235, anchor="center")
 
-    listeners_label = tk.Label(window, font=("MS Gothic", 24), bg="black", fg="white")
-    listeners_label.place(x=220, y=320, anchor="w")
+    listeners_label = tk.Label(window, font=("MS PGothic", 24), bg="#20262B", fg="white")
+    listeners_label.place(x=220, y=315, anchor="w")
 
-    playcount_label = tk.Label(window, font=("MS Gothic", 24), bg="black", fg="white")
-    playcount_label.place(x=250, y=410, anchor="w")
+    playcount_label = tk.Label(window, font=("MS PGothic", 24), bg="#20262B", fg="white")
+    playcount_label.place(x=250, y=405, anchor="w")
 
-    genre_label = tk.Label(window, font=("MS Gothic", 24), bg="black", fg="white")
-    genre_label.place(x=180, y=500, anchor="w")
+    genre_label = tk.Label(window, font=("MS PGothic", 24), bg="#20262B", fg="white")
+    genre_label.place(x=180, y=495, anchor="w")
 
     album_canvas = tk.Canvas(window, width=200, height=200)
     album_canvas.place(x=860, y=280, anchor="center")
 
-    top_album_name_label = tk.Label(window, font=("MS Gothic", 24), bg="black", fg="white")
-    top_album_name_label.place(x=860, y=420, anchor="center")
+    top_album_name_label = tk.Label(window, font=("MS PGothic", 24), bg="#20262B", fg="white")
+    top_album_name_label.place(x=860, y=405, anchor="center")
 
-    analyze_button = tk.Button(window, text="Analyze Bands", anchor="center", command=analyze)
-    analyze_button.place(x=785, y=715, anchor="w")
 
-    visualize_button = tk.Button(window, text="Visualize popularity", anchor="center", command=visualize_popularity)
-    visualize_button.place(x=785, y=475, anchor="w")
 
-    similar1 = tk.Label(window, font=("MS Gothic", 20), bg="black", fg="white")
+    top_albums_button = tk.Button(window, text="Top Albums", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    top_albums_button.place(x=700, y=495, anchor="w")
+
+    top_tracks_button = tk.Button(window, text="Top Tracks", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    top_tracks_button.place(x=700, y=560, anchor="w")
+
+    biography_button = tk.Button(window, text="Biography", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    biography_button.place(x=700, y=625, anchor="w")
+
+    visualize_button = tk.Button(window, text="Popularity Comparison", anchor="center", command=visualize_popularity, bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    visualize_button.place(x=700, y=690, anchor="w")
+
+    analyze_button = tk.Button(window, text="Ranking", anchor="center", command=analyze, bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    analyze_button.place(x=700, y=755, anchor="w")
+
+
+
+    similar1 = tk.Label(window, font=("MS PGothic", 20), bg="#20262B", fg="white")
     similar1.place(x=75, y=625)
 
-    similar2 = tk.Label(window, font=("MS Gothic", 20), bg="black", fg="white")
+    similar2 = tk.Label(window, font=("MS PGothic", 20), bg="#20262B", fg="white")
     similar2.place(x=75, y=675)
 
-    similar3 = tk.Label(window, font=("MS Gothic", 20), bg="black", fg="white")
+    similar3 = tk.Label(window, font=("MS PGothic", 20), bg="#20262B", fg="white")
     similar3.place(x=75, y=725)
 
     window.mainloop()
