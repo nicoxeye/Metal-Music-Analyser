@@ -2,8 +2,8 @@ from .api_requests import get_band_info, get_top_album_image, get_top_album_name
 from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands
 from .plot_visualisation import visualize_band_popularity
 import tkinter as tk
-import customtkinter
-from tkinter import messagebox, PhotoImage, Label, Toplevel
+import customtkinter as Ctk
+from tkinter import messagebox, PhotoImage, Label
 import os
 import requests
 from PIL import Image, ImageTk
@@ -57,16 +57,16 @@ def start_gui():
 
         content = get_band_biography(band_name)
 
-        newWindow = Toplevel(window)
+        newWindow = Ctk.CTkToplevel(window)
 
         newWindow.configure(background="black")
-        newWindow.title("Biography")
+        newWindow.title(f"{band_name} Biography")
         newWindow.geometry("600x800")
 
-        label1 = tk.Label(newWindow, text=f"{band_name} BIOGRAPHY", font=("MS PGothic", 20), bg="black", fg="white")
+        label1 = Ctk.CTkLabel(newWindow, text="BIOGRAPHY", font=("MS PGothic", 20), fg_color="transparent")
         label1.pack(pady=(10, 5))
 
-        textbox = customtkinter.CTkTextbox(newWindow, height=800, corner_radius=50, scrollbar_button_color="white", width=600, font=("MS PGothic", 22))
+        textbox = Ctk.CTkTextbox(newWindow, height=800, corner_radius=50, scrollbar_button_color="white", width=600, font=("MS PGothic", 22), fg_color="#20262B")
 
         textbox.insert("0.0", content) 
         textbox.configure(state="disabled")  # read-only
@@ -75,32 +75,41 @@ def start_gui():
 
     def analyze():
         band_name = entry.get()
-        newWindow = Toplevel(window)
-
-        newWindow.configure(background="black")
+        newWindow = Ctk.CTkToplevel(window)
 
         newWindow.title("Analysing Metal Bands")
 
-        newWindow.geometry("600x400")
+        newWindow.geometry("600x800")
 
         bands = load_bands_from_file("bands.txt")
         df = analyse_bands_popularity(bands)
                 
-        band_info, rank_info, top_bands_info = compare_bands(band_name, df)
+        band_info, rank_info, rank_info_playcount, top_bands_info = compare_bands(band_name, df)
 
-        band_label = tk.Label(newWindow, text="Band Info", font="Calibri, 12", anchor="w")
+        label = Ctk.CTkLabel(newWindow, text=f"{band_name}", font=("MS PGothic", 28))
+        label.pack(fill="both", padx=10, pady=10)
+
+        band_label = Ctk.CTkLabel(newWindow, text="Band Info", font=("MS PGothic", 22))
         band_label.pack(fill="both", padx=10, pady=10)
 
-        rank_label = tk.Label(newWindow, text="Rank Info", font="Calibri, 12", anchor="w")
-        rank_label.pack(fill="both", padx=10, pady=10)
+        rank_label_listeners = Ctk.CTkLabel(newWindow, text="Rank Info Based On Listeners", font=("MS PGothic", 22))
+        rank_label_listeners.pack(fill="both", padx=10, pady=10)
 
-        top_bands_label = tk.Label(newWindow, text="Top 5 Bands", font="Calibri, 12", anchor="w")
-        top_bands_label.pack(fill="both", padx=10, pady=10)
+        rank_info_playcount_label = Ctk.CTkLabel(newWindow, text="Rank Info Based On Playcount", font=("MS PGothic", 22))
+        rank_info_playcount_label.pack(fill="both", padx=10, pady=10)
 
-        band_label.config(text=band_info)
-        rank_label.config(text=rank_info) #ranking based on listeners
-        #TODO: ranking based on playcount
-        top_bands_label.config(text=f"Top 5 Bands:\n{top_bands_info}")
+
+        band_label.configure(text=band_info)
+        rank_label_listeners.configure(text=rank_info)
+        rank_info_playcount_label.configure(text=rank_info_playcount)
+
+        textbox = Ctk.CTkTextbox(newWindow, height=800, corner_radius=50, scrollbar_button_color="white", width=600, font=("MS PGothic", 20), fg_color="#20262B")
+
+        textbox.insert("1.0", "\n" + top_bands_info)
+        textbox.insert("1.0", "RANKING BY LISTENERS\n")
+        textbox.configure(state="disabled")  # read-only
+        textbox.pack()
+
 
     def visualize_popularity():
         band_name = entry.get()
@@ -110,15 +119,17 @@ def start_gui():
 
         visualize_band_popularity(band_name, df, window)
 
-    window = tk.Tk()
+    window = Ctk.CTk()
+    Ctk.set_default_color_theme("dark-blue")
 
     current_dir = os.path.dirname(__file__)
     image_path = os.path.join(current_dir, "images", "bg.png")
-
+    
     bg = PhotoImage(file=image_path)
-  
+    
     label1 = Label(window, image = bg) 
-    label1.place(x = 0, y = 0) 
+    label1.place(x = 0, y = 0, anchor="nw") 
+    label1.configure(padx=0, pady=0)
 
     window_width = 1200
     window_height = 800
@@ -132,7 +143,7 @@ def start_gui():
     y_position = (screen_height // 2) - (window_height // 2)
 
     window.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
-    window.title("Metal Music Analyzer")
+    window.title("Metal Music Analyser")
 
     entry = tk.Entry(window, font=("MS PGothic", 24))
     entry.place(x=65, y=235, anchor="w", width=400, height=50)

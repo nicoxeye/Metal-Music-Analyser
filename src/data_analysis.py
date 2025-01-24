@@ -24,15 +24,15 @@ def analyse_bands_popularity(bands):
 
 def compare_bands(searched_band, df):
     band_data = df[df['band'] == searched_band].iloc[0]
-
-    band_info = f"{searched_band} - Listeners: {band_data['listeners']}, Playcount: {band_data['playcount']}"
+    band_info = f"Listeners: {band_data['listeners']}, Playcount: {band_data['playcount']}"
 
     df_sorted = df.sort_values(by='listeners', ascending = False).reset_index(drop=True)
-    #print(df_sorted)
-
-    band_rank = df_sorted[df_sorted['band'] == searched_band].index[0] + 1
-    
+    band_rank = df_sorted[df_sorted['band'] == searched_band].index[0]
     rank_info = f"{searched_band} is ranked {band_rank} out of {len(df_sorted)} bands based on listeners."
 
-    return band_info, rank_info, df_sorted[['band', 'listeners']].head(5).to_string(index=False)
+    df_sorted_playcount = df.sort_values(by='playcount', ascending = False).reset_index(drop=True)
+    band_rank_playcount = df_sorted[df_sorted_playcount['band'] == searched_band].index[0]
+    rank_info_playcount = f"{searched_band} is ranked {band_rank_playcount} out of {len(df_sorted)} bands based on playcount."
+
+    return band_info, rank_info, rank_info_playcount,  df_sorted[['band', 'listeners', 'playcount']].to_string(index=True)
 
