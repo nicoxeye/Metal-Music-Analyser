@@ -2,6 +2,7 @@ from .api_requests import get_band_info, get_top_album_image, get_top_album_name
 from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands
 from .plot_visualisation import visualize_band_popularity
 import tkinter as tk
+import customtkinter
 from tkinter import messagebox, PhotoImage, Label, Toplevel
 import os
 import requests
@@ -59,24 +60,18 @@ def start_gui():
         newWindow = Toplevel(window)
 
         newWindow.configure(background="black")
-        newWindow.title(f"{band_name} Biography")
-        newWindow.geometry("600x1080")
+        newWindow.title("Biography")
+        newWindow.geometry("600x800")
 
-        label1 = tk.Label(newWindow, text="BIOGRAPHY", font=("MS PGothic", 20), bg="black", fg="white")
+        label1 = tk.Label(newWindow, text=f"{band_name} BIOGRAPHY", font=("MS PGothic", 20), bg="black", fg="white")
         label1.pack(pady=(10, 5))
 
-        frame = tk.Frame(newWindow, bg="black") # frame to contain the text widget
-        frame.pack(fill="both", expand=True, padx=10, pady=10)
-        
-        text_widget = tk.Text(frame, wrap="word", font=("MS PGothic", 20), bg="#20262B", fg="white")
-        text_widget.insert("1.0", content)
-        text_widget.configure(state="disabled") # read only
-        text_widget.pack(side="left", fill="both", expand=True)
+        textbox = customtkinter.CTkTextbox(newWindow, height=800, corner_radius=50, scrollbar_button_color="white", width=600, font=("MS PGothic", 22))
 
-        scroll_bar = tk.Scrollbar(frame, orient="vertical", command=text_widget.yview)
-        scroll_bar.pack(side="right", fill="y")
-
-        text_widget.config(yscrollcommand=scroll_bar.set)
+        textbox.insert("0.0", content) 
+        textbox.configure(state="disabled")  # read-only
+        textbox.pack()
+    
 
     def analyze():
         band_name = entry.get()
