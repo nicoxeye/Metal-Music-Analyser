@@ -3,7 +3,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import Toplevel
 
 def visualize_band_popularity(searched_band, df, window):
-    #print(df)
     df_sorted = df.sort_values(by='listeners', ascending=False).reset_index(drop=True)
     
     band_index = df_sorted[df_sorted['band'] == searched_band].index[0]
@@ -16,14 +15,15 @@ def visualize_band_popularity(searched_band, df, window):
     band_listeners = surrounding_bands['listeners'].tolist()
 
     figure, ax = plt.subplots(figsize=(8, 6))
-    ax.bar(band_names, band_listeners, color=['blue' if band != searched_band else 'red' for band in band_names])
+    ax.bar(band_names, band_listeners, color=['black' if band != searched_band else 'aqua' for band in band_names])
     
-    ax.set_title(f"Band Popularity (Listeners) Around {searched_band}")
+    ax.set_title(f"Bands who have similar popularity to {searched_band}")
     ax.set_xlabel("Band")
     ax.set_ylabel("Listeners")
 
     pwindow = Toplevel(window)
     pwindow.title(f"Popularity Comparison - {searched_band}")
+    pwindow.configure(background="black")
     pwindow.geometry("800x600")
 
     canvas = FigureCanvasTkAgg(figure, master=pwindow)

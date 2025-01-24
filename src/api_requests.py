@@ -64,3 +64,14 @@ def get_band_popularity(band_name):
         return listeners, playcount
     else:
         return None, None
+    
+
+def get_band_biography(band_name):
+    url = f"http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist={band_name}&api_key={api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        published = data['artist']['bio']['content']
+        return published
+    return "None"

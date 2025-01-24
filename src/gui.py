@@ -1,4 +1,4 @@
-from .api_requests import get_band_info, get_top_album_image, get_top_album_name, get_similar_artists
+from .api_requests import get_band_info, get_top_album_image, get_top_album_name, get_similar_artists, get_band_biography
 from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands
 from .plot_visualisation import visualize_band_popularity
 import tkinter as tk
@@ -51,10 +51,38 @@ def start_gui():
             else:
                 album_canvas.create_text(100, 100, text="No image available", font="Calibri, 12")
 
-            
+    def biography():
+        band_name = entry.get()
+
+        content = get_band_biography(band_name)
+
+        newWindow = Toplevel(window)
+
+        newWindow.configure(background="black")
+        newWindow.title(f"{band_name} Biography")
+        newWindow.geometry("600x1080")
+
+        label1 = tk.Label(newWindow, text="BIOGRAPHY", font=("MS PGothic", 20), bg="black", fg="white")
+        label1.pack(pady=(10, 5))
+
+        frame = tk.Frame(newWindow, bg="black") # frame to contain the text widget
+        frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        text_widget = tk.Text(frame, wrap="word", font=("MS PGothic", 20), bg="#20262B", fg="white")
+        text_widget.insert("1.0", content)
+        text_widget.configure(state="disabled") # read only
+        text_widget.pack(side="left", fill="both", expand=True)
+
+        scroll_bar = tk.Scrollbar(frame, orient="vertical", command=text_widget.yview)
+        scroll_bar.pack(side="right", fill="y")
+
+        text_widget.config(yscrollcommand=scroll_bar.set)
+
     def analyze():
         band_name = entry.get()
         newWindow = Toplevel(window)
+
+        newWindow.configure(background="black")
 
         newWindow.title("Analysing Metal Bands")
 
@@ -75,7 +103,8 @@ def start_gui():
         top_bands_label.pack(fill="both", padx=10, pady=10)
 
         band_label.config(text=band_info)
-        rank_label.config(text=rank_info)
+        rank_label.config(text=rank_info) #ranking based on listeners
+        #TODO: ranking based on playcount
         top_bands_label.config(text=f"Top 5 Bands:\n{top_bands_info}")
 
     def visualize_popularity():
@@ -139,7 +168,7 @@ def start_gui():
     top_tracks_button = tk.Button(window, text="Top Tracks", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
     top_tracks_button.place(x=700, y=560, anchor="w")
 
-    biography_button = tk.Button(window, text="Biography", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    biography_button = tk.Button(window, text="Biography", anchor="center", command=biography, bg="black", fg="white", font=("MS PGothic", 22), width=20)
     biography_button.place(x=700, y=625, anchor="w")
 
     visualize_button = tk.Button(window, text="Popularity Comparison", anchor="center", command=visualize_popularity, bg="black", fg="white", font=("MS PGothic", 22), width=20)
