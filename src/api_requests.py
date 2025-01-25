@@ -75,3 +75,24 @@ def get_band_biography(band_name):
         published = data['artist']['bio']['content']
         return published
     return "None"
+
+def get_top_albums(band_name):
+    url = f"http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist={band_name}&api_key={api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        albums = []
+
+        if 'topalbums' in data and 'album' in data['topalbums']:
+            for album in data['topalbums']['album'][:5]:
+                album_name = album['name']
+                images = album['image']
+                for img in images:
+                    if img['size'] == 'large':
+                        album_image = img['#text']
+
+                        albums.append((album_name, album_image))
+        return albums
+    return "None"

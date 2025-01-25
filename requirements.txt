@@ -1,5 +1,6 @@
-certifi==2024.12.14
-charset-normalizer==3.4.1
-idna==3.10
-requests==2.32.3
-urllib3==2.3.0
+customtkinter==5.2.2
+matplotlib==3.10.0
+pandas==2.2.3
+Pillow==11.1.0
+python-dotenv==1.0.1
+Requests==2.32.3
