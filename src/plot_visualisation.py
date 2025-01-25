@@ -30,3 +30,26 @@ def visualize_band_popularity(searched_band, df, window):
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
+
+def visualize_top_tracks(band_name, track_df, window):
+    sorted_df = track_df.sort_values(by='playcount', ascending=False).reset_index(drop=True)
+
+    track_names = sorted_df['track_name'].tolist()
+    track_playcounts = sorted_df['playcount'].tolist()
+
+    figure, ax = plt.subplots(figsize=(8, 6))
+
+    ax.bar(track_names, track_playcounts, color="black")
+
+    ax.set_title(f"{band_name}'s Top Tracks", fontsize=16)
+    ax.set_xlabel("Track Name", fontsize=16)
+    ax.set_ylabel("Playcount", fontsize=16)
+
+    pwindow = Toplevel(window)
+    pwindow.title(f"Top Tracks - {band_name}")
+    pwindow.geometry("800x600")
+
+    canvas = FigureCanvasTkAgg(figure, master=pwindow)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill="both", expand=True)
+

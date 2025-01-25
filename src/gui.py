@@ -1,6 +1,6 @@
 from .api_requests import get_band_info, get_top_album_image, get_top_album_name, get_similar_artists, get_band_biography, get_top_albums
-from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands
-from .plot_visualisation import visualize_band_popularity
+from .data_analysis import analyse_bands_popularity, load_bands_from_file, compare_bands, analyse_track_popularity
+from .plot_visualisation import visualize_band_popularity, visualize_top_tracks
 import tkinter as tk
 import customtkinter as Ctk
 from tkinter import messagebox, PhotoImage, Label
@@ -52,7 +52,11 @@ def start_gui():
     
     def top_tracks():
         band_name = entry.get()
-        newWindow = Ctk.CTkToplevel(window)
+
+        track_df = analyse_track_popularity(band_name)
+
+        visualize_top_tracks(band_name, track_df, window)
+
 
     def display_albums():
         band_name = entry.get()
@@ -216,7 +220,7 @@ def start_gui():
     top_albums_button = tk.Button(window, text="Top Albums", anchor="center", command=display_albums, bg="black", fg="white", font=("MS PGothic", 22), width=20)
     top_albums_button.place(x=700, y=495, anchor="w")
 
-    top_tracks_button = tk.Button(window, text="Top Tracks", anchor="center", bg="black", fg="white", font=("MS PGothic", 22), width=20)
+    top_tracks_button = tk.Button(window, text="Top Tracks", anchor="center", command=top_tracks, bg="black", fg="white", font=("MS PGothic", 22), width=20)
     top_tracks_button.place(x=700, y=560, anchor="w")
 
     biography_button = tk.Button(window, text="Biography", anchor="center", command=biography, bg="black", fg="white", font=("MS PGothic", 22), width=20)

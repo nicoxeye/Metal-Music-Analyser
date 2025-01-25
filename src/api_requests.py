@@ -96,3 +96,21 @@ def get_top_albums(band_name):
                         albums.append((album_name, album_image))
         return albums
     return "None"
+
+def get_top_tracks(band_name):
+    url = f"http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist={band_name}&api_key={api_key}&format=json"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        tracks = []
+
+        if 'toptracks' in data and 'track' in data['toptracks']:
+            for track in data['toptracks']['track'][:5]:
+                track_name = track['name']
+                playcount = track['playcount']
+
+                tracks.append((track_name, int(playcount)))
+        return tracks
+    return []

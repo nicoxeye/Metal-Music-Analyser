@@ -1,5 +1,5 @@
 import pandas
-from .api_requests import get_band_popularity
+from .api_requests import get_band_popularity, get_top_tracks
 
 def load_bands_from_file(filename="bands.txt"):
     with open(filename, "r") as f:
@@ -35,4 +35,19 @@ def compare_bands(searched_band, df):
     rank_info_playcount = f"{searched_band} is ranked {band_rank_playcount} out of {len(df_sorted)} bands based on playcount."
 
     return band_info, rank_info, rank_info_playcount,  df_sorted[['band', 'listeners', 'playcount']].to_string(index=True)
+
+
+def analyse_track_popularity(band_name):
+    track_data = []
+    
+    tracks = get_top_tracks(band_name)
+    
+    for track in tracks:
+            track_data.append({
+                'track_name': track[0],
+                'playcount': track[1]
+            })
+
+    df = pandas.DataFrame(track_data)
+    return df
 
