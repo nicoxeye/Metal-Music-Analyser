@@ -11,7 +11,7 @@ It can also be used as an overall artist analyser, since it works just fine with
 ## Features
 
 - Fetches information about metal bands, albums, tracks, their biography, their genre and similar artists from LastFM API.
-- Analyses most frequently played tracks, top albums, where the band places on a ranking based on listeners and playcount among bands in bands.txt.
+- Analyses most frequently played tracks, top albums, where the band places on a ranking based on listeners and playcount amongst bands in bands.txt.
 - Visualizes the band's top five tracks.
 - Visualizes four bands that surround the band searched based on their popularity using graphs.
 
@@ -39,3 +39,12 @@ API_KEY=your-api-key-here
 
 > [!CAUTION]
 > Never commit your API keys on GitHub.
+
+### Step 3: Install needed packages
+
+In your terminal:
+```bash
+pip install requirements.txt
+```
+
+Then run main.py and have fun :D
