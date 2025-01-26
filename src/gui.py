@@ -34,6 +34,10 @@ def start_gui():
                 similar1.config(text=f"{artists[0]['name']}")
                 similar2.config(text=f"{artists[1]['name']}")
                 similar3.config(text=f"{artists[2]['name']}")
+            else:
+                similar1.config(text="No similar artist found")
+                similar2.config(text="No similar artist found")
+                similar3.config(text="No similar artist found")
 
             if album_image_url:
                 response = requests.get(album_image_url)
@@ -48,18 +52,44 @@ def start_gui():
                 album_canvas.image = photo  #type: ignore
             else:
                 album_canvas.create_text(100, 100, text="No image available", font="Calibri, 12")
+        else:
+            listeners_label.config(text="No info found")
+            playcount_label.config(text="No info found")
+            genre_label.config(text="No info found")
+            top_album_name_label.config(text="No info found")
+
+            similar1.config(text="No similar artist found")
+            similar2.config(text="No similar artist found")
+            similar3.config(text="No similar artist found")
+
+            album_canvas.delete("all")
+            album_canvas.create_text(100, 100, text="No image available", font="Calibri, 12")
 
     
     def top_tracks():
         band_name = entry.get()
 
-        track_df = analyse_track_popularity(band_name)
+        if not band_name:
+            messagebox.showwarning("Input Error", "Please enter a band name.")
+            return
+        
+        try:
+            track_df = analyse_track_popularity(band_name)
 
-        visualize_top_tracks(band_name, track_df, window)
+            visualize_top_tracks(band_name, track_df, window)
+
+        except ValueError:
+            messagebox.showwarning("Error", "Something went wrong with fetching data.")
+            
 
 
     def display_albums():
         band_name = entry.get()
+
+        if not band_name:
+            messagebox.showwarning("Input Error", "Please enter a band name.")
+            return
+        
         newWindow = Ctk.CTkToplevel(window)
         newWindow.resizable(False, False)
 
@@ -70,7 +100,12 @@ def start_gui():
         label1 = Ctk.CTkLabel(newWindow, text=f"TOP 5 ALBUMS OF {band_name}", font=("MS PGothic", 24), fg_color="transparent")
         label1.pack(pady=(10), padx=(10), fill="both", expand=True)
 
-        albums = get_top_albums(band_name)
+        try:
+            albums = get_top_albums(band_name)
+
+        except ValueError:
+            messagebox.showwarning("Error", "Something went wrong with fetching data.")
+            return
 
         scrollable_frame = Ctk.CTkScrollableFrame(newWindow, fg_color="#20262B", width=750, height=700)
         scrollable_frame.pack(pady=10, padx=10, fill="both", expand=True)
@@ -104,7 +139,16 @@ def start_gui():
     def biography():
         band_name = entry.get()
 
-        content = get_band_biography(band_name)
+        if not band_name:
+            messagebox.showwarning("Input Error", "Please enter a band name.")
+            return
+        
+
+        try:
+            content = get_band_biography(band_name)
+        except ValueError:
+            messagebox.showwarning("Error", "Something went wrong with fetching data.")
+            return
 
         newWindow = Ctk.CTkToplevel(window)
 
@@ -123,25 +167,48 @@ def start_gui():
     
     def visualize_popularity():
         band_name = entry.get()
-        bands = load_bands_from_file("bands.txt")
 
-        df = analyse_bands_popularity(bands)
+        if not band_name:
+            messagebox.showwarning("Input Error", "Please enter a band name.")
+            return
+    
+        try:
+            bands = load_bands_from_file("bands.txt")
 
-        visualize_band_popularity(band_name, df, window)
+            df = analyse_bands_popularity(bands)
+
+            visualize_band_popularity(band_name, df, window)
+
+        except ValueError:
+            messagebox.showwarning("Error", "Something went wrong with fetching data.")
+            return
+
 
 
     def analyze():
         band_name = entry.get()
+
+        if not band_name:
+            messagebox.showwarning("Input Error", "Please enter a band name.")
+            return
+        
         newWindow = Ctk.CTkToplevel(window)
 
         newWindow.title("Analysing Metal Bands")
 
         newWindow.geometry("600x800")
 
-        bands = load_bands_from_file("bands.txt")
-        df = analyse_bands_popularity(bands)
-                
-        band_info, rank_info, rank_info_playcount, top_bands_info = compare_bands(band_name, df)
+        try:
+
+            bands = load_bands_from_file("bands.txt")
+
+            df = analyse_bands_popularity(bands)
+
+            band_info, rank_info, rank_info_playcount, top_bands_info = compare_bands(band_name, df)
+
+        except ValueError:
+            messagebox.showwarning("Error", "Something went wrong with fetching data.")
+            return
 
         label = Ctk.CTkLabel(newWindow, text=f"{band_name}", font=("MS PGothic", 28))
         label.pack(fill="both", padx=10, pady=10)
